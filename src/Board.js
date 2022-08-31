@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Cell from "./Cell";
+import { startsOn } from "./utils";
 import "./Board.css";
 
 /** Game board of Lights out.
@@ -33,7 +34,12 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
     let initialBoard = [];
-    // TODO: create array-of-arrays of true/false values
+
+      for (let i = 0; i < ncols; i++) {
+        initialBoard.push(Array.from({length: nrows})
+          .map(startsOn(chanceLightStartsOn)));
+      }
+      
     return initialBoard;
   }
 
