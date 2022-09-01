@@ -35,30 +35,18 @@ import "./Board.css";
 //        ]
 // 4rows x 3 cols
 
-function Board({ nrows=3, ncols=3, chanceLightStartsOn=0.5 }) {
+function Board({ nrows = 2, ncols = 2, chanceLightStartsOn = 0.5 }) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
-    // let initialBoard = [];
 
-      // for (let x = 0; x < nrows; x++) {
-    let initialBoard = Array.from({length: nrows})
-        .map(row => Array.from({length: ncols})
-          .map(col => startsOn(chanceLightStartsOn)));
-    console.log("initialboard", initialBoard);
-
-        // for (let y = 0; y < ncols; y++) {
-        //   console.log(initialBoard);
-        //   console.log("true/false", startsOn(chanceLightStartsOn))
-        //   initialBoard[x] = startsOn(chanceLightStartsOn);
-        //   console.log("t/f", initialBoard[x]);
-        // }
-      // }
-      // initialBoard.push(Array.from({length: ncols})
-      //     .map(startsOn(chanceLightStartsOn)));
+    let initialBoard = Array.from({ length: nrows })
+      .map(row => Array.from({ length: ncols })
+        .map(col => startsOn(chanceLightStartsOn)));
 
     return initialBoard;
+
   }
 
   function hasWon() {
@@ -83,7 +71,7 @@ function Board({ nrows=3, ncols=3, chanceLightStartsOn=0.5 }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
-      const boardCopy = [...oldBoard];
+      const boardCopy = oldBoard.map(r => [...r])
 
       // TODO: in the copy, flip this cell and the cells around it
       flipCell(y, x, boardCopy);
@@ -99,21 +87,24 @@ function Board({ nrows=3, ncols=3, chanceLightStartsOn=0.5 }) {
 
   return (
     <div className="Board">
-      { hasWon() &&
+      {hasWon() &&
         <p> You Win! </p>
       }
 
-      { !hasWon() &&
+      {!hasWon() &&
         <table>
+          <tbody>
           {
             board.map((rows, x) => {
-              return rows.map((col, y) => {
+              return (<tr key={x}>{rows.map((col, y) => {
                 return <Cell
-                flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)}
-                isLit={board[y][x]}/>
-              })
+                  key={`${y}-${x}`}
+                  flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)}
+                  isLit={board[y][x]} />
+              })}</tr>)
             })
           }
+          </tbody>
         </table>
       }
     </div>
